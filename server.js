@@ -1,36 +1,32 @@
 import express from 'express';
 import mongoose from 'mongoose';
-
 import dotenv from 'dotenv';
-dotenv.config();
 
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
-const connectionString = process.env.MONGODB_URL;  
-mongoose.connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+const connectionString = process.env.MONGODB_URL;
+mongoose.connect(connectionString) 
 .then(() => console.log('Connected to MongoDB'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
 
-const user = new mongoose.Schema({
+const userColleges = new mongoose.Schema({
     name: String,
     mail : String,
     feedback : String,
 })
 
-const userModel = mongoose.model('user', user);
+const userModel = mongoose.model('userCollege', userColleges);
 
 app.get('/bb-students',(req,res)=>{
     userModel.find()
     .then((data)=> res.json(data))
     .catch(()=> res.status(500).send('Error'))
 });
-app.post('/',(req,res)=>{
+app.post('/bb-students',(req,res)=>{
     const studentsList = new userModel(req.body);
     studentsList.save()
     .then((data)=> res.json(data))
