@@ -1,10 +1,20 @@
 import express from 'express';
 import mongoose from 'mongoose';
 
-const app = express();
+import dotenv from 'dotenv';
+dotenv.config();
 
-mongoose.connect('mongodb://localhost:27017/bb-students')
-.then(()=> console.log('connected mongodb'))
+
+const app = express();
+app.use(express.json());
+
+const connectionString = process.env.MONGODB_URL;  
+mongoose.connect(connectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch((err) => console.error('MongoDB connection error:', err));
 
 
 const user = new mongoose.Schema({
